@@ -1,10 +1,10 @@
-title BasicCal.asm							;DOS file name of program
+title BasicCal.asm		;DOS file name of program
 
-.586											;enable all pentium instructions
-.model flat, stdcall							;memory model & calling convention
-.stack 8192										;allocate 8k for stack
+.586			        ;enable all pentium instructions
+.model flat, stdcall		;memory model & calling convention
+.stack 8192			;allocate 8k for stack
 
-INCLUDELIB kernel32.lib							;Include the kernel 32 library
+INCLUDELIB kernel32.lib	 	;Include the kernel 32 library
 
 ;----------------------------------------------------------
 ; Constant Definitions
@@ -26,29 +26,29 @@ DISABLE_PROCESSED_INPUT equ 7           ;Flag to turn on line buffering
 ; Library Imports -> Prototype Declarations Section
 ; -----------------------------------------------------------------------
 ExitProcess proto,
-    dwExitCode:dword				   ;The exit code for the process 
+    dwExitCode:dword			;The exit code for the process 
 
 GetStdHandle proto, 
-	nStdHandle: dword                  ;The standard device. -10=INPUT, -11=OUTPUT, -13=ERROR
+	nStdHandle: dword               ;The standard device. -10=INPUT, -11=OUTPUT, -13=ERROR
 
 SetConsoleMode proto,                  
-    hConsoleHandle:dword,              ;A handle to the console input buffer or a console screen buffer
-	dwMode:dword                       ;The input or output mode to be set. 
+    hConsoleHandle:dword,       	;A handle to the console input buffer or a console screen buffer
+	dwMode:dword                    ;The input or output mode to be set. 
 
 ReadFile proto,	
-    hFile:dword,                       ;A handle to the device
-	lpBuffer:near32,                   ;A pointer to the buffer that receives the data read 
-    nNumberOfCharsToRead:dword,        ;The maximum number of bytes to be read.
-    lpNumberOfbytesRead:near32,        ;A pointer to the variable that receives the number of bytes read
-    lpOverlapped:near32                ;A pointer to an OVERLAPPED structure is required if the hFile parameter 
-	                                   ;was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.
+    hFile:dword,                       	;A handle to the device
+	lpBuffer:near32,                ;A pointer to the buffer that receives the data read 
+    nNumberOfCharsToRead:dword,         ;The maximum number of bytes to be read.
+    lpNumberOfbytesRead:near32,         ;A pointer to the variable that receives the number of bytes read
+    lpOverlapped:near32                 ;A pointer to an OVERLAPPED structure is required if the hFile parameter 
+	                                ;was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.
 
 WriteFile proto,                  
-    hFile:dword, lpBuffer:near32,      ;A handle to the device
-    nNumberOfCharsToWrite:dword,       ;The maximum number of bytes to be written.
-    lpNumberOfbytesWritten:near32,     ;A pointer to the variable that receives the number of bytes written
-    lpOverlapped:near32                ;A pointer to an OVERLAPPED structure is required if the hFile parameter 
-	                                   ;was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.
+    hFile:dword, lpBuffer:near32,       ;A handle to the device
+    nNumberOfCharsToWrite:dword,        ;The maximum number of bytes to be written.
+    lpNumberOfbytesWritten:near32,      ;A pointer to the variable that receives the number of bytes written
+    lpOverlapped:near32                 ;A pointer to an OVERLAPPED structure is required if the hFile parameter 
+	                                ;was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.
 
 ; -----------------------------------------------------------------------
 ; .data -> Global Variables Section
@@ -63,7 +63,7 @@ WriteFile proto,
 	written			dd  ?	
 
 	; String variables for output formatting
-    starStr db 50 DUP('*'), NEWLINE, 0
+    	starStr db 50 DUP('*'), NEWLINE, 0
 	promptMsg db "Basic calculator. One operation allowed", NEWLINE,0
 	promptMsg1 db "Input a number base and the calculation line. Input 'Q' or 'q' to quit.", NEWLINE,0
 	promptMsg2 db "Enter calculation in form of space delimited numbers, then operators.", NEWLINE,0
@@ -74,7 +74,7 @@ WriteFile proto,
 	
 	; Variables for string and numbers
 	baseNum WORD ?				; variable used to store base of number entered
-	usrString db 40 DUP (?), 0	; variable used to parse input and store strings from user input. NULL terminated
+	usrString db 40 DUP (?), 0		; variable used to parse input and store strings from user input. NULL terminated
 
 	;Variables to parse input
 	num1		WORD 0
@@ -98,7 +98,7 @@ WriteFile proto,
 	Num2StrCount dw 0				; counter for num 2 string
 	
 	; Variables for Num2Str
-	usrStringResult db 40 DUP(?)	; variable used to store string result of number conversion
+	usrStringResult db 40 DUP(?)			; variable used to store string result of number conversion
 	num2Convert word ?				
 
 	; error messages
@@ -122,20 +122,20 @@ main proc
    xor ecx, ecx
    xor edx, edx
 
-   call printPrompt							; Print welcome prompt
+   call printPrompt				; Print welcome prompt
    
    ;loop until user enters 'q' or 'Q'
    calLoop:
-		call numBasePrompt					; Prompt user to enter base or quit
-		call getUsrString					; get the string from prompt to store in usrString variable
-		call compString						; compares string in usrString, if 'q' or 'Q' exits program
-		call Str2Num					    ; function to convert usrString to number, stores result in baseNum 				
-		call printCalcPrompt				; prints prompt for user calculation input, Display ": " prompt for calculation line
-		call getUsrString					; get calculation line from user
-		call parseString					; parse the line, and calculate answer
-		call convertResults					; convert results of calculations into binary, decimal, Hex, and Base given
-		call printResult					; print result of operation to screen
-		jmp calLoop							; go back to mainLoop	;								
+		call numBasePrompt		; Prompt user to enter base or quit
+		call getUsrString		; get the string from prompt to store in usrString variable
+		call compString			; compares string in usrString, if 'q' or 'Q' exits program
+		call Str2Num		        ; function to convert usrString to number, stores result in baseNum 				
+		call printCalcPrompt		; prints prompt for user calculation input, Display ": " prompt for calculation line
+		call getUsrString		; get calculation line from user
+		call parseString		; parse the line, and calculate answer
+		call convertResults		; convert results of calculations into binary, decimal, Hex, and Base given
+		call printResult		; print result of operation to screen
+		jmp calLoop			; go back to mainLoop								
 
    invoke ExitProcess, 0			
 main endp
@@ -168,7 +168,7 @@ printResult proc
 	; print hex
 	lea esi, hexPrompt
 	call PrintString
-	lea esi, hexValue			; print hex value
+	lea esi, hexValue		; print hex value
 	call PrintString
 
 	; print spaces
@@ -178,7 +178,7 @@ printResult proc
 	; print base given
 	lea esi, BaseGivenPrompt
 	call PrintString
-	lea esi, baseValue			; print base given balue
+	lea esi, baseValue		; print base given balue
 	call PrintString
 	
 	; print spaces
@@ -188,7 +188,7 @@ printResult proc
 	; print decimal
 	lea esi, decimalPrompt
 	call PrintString
-	lea esi, decimalValue			; print result in decimal
+	lea esi, decimalValue		; print result in decimal
 	call PrintString
 	
 	; print newline
@@ -197,7 +197,7 @@ printResult proc
 
 	popad		; return registers
 	popfd		; return flags
-	ret			; return to caller
+	ret		; return to caller
 printResult endp
 
 ; -----------------------------------------------------------------------
@@ -206,19 +206,19 @@ printResult endp
 ; Output: results of binary, decimal, base given, and hex values stored into variables
 ; -----------------------------------------------------------------------
 convertResults proc
-	pushad						; save registers
-    pushfd						; save flags
+	pushad				; save registers
+    	pushfd				; save flags
 	
 	; Convert results 
 	lea esi, resultCal
 	call convertNumToHex			; converts number to hex	
 	call convertToBinary			; converts number to binary
-	call convertNumToBaseGiven		; converts number to base provided by user		; fix this
-	call convertToDecimal			; converts number to decimal					; fix this
+	call convertNumToBaseGiven		; converts number to base provided by user	
+	call convertToDecimal			; converts number to decimal				
 
-	popfd					    ; restore flags
-	popad					    ; restore registers
-	ret						    ; return to caller
+	popfd		; restore flags
+	popad	        ; restore registers
+	ret		; return to caller
 convertResults endp
 
 ; -----------------------------------------------------------------------
@@ -236,39 +236,39 @@ convertToDecimal proc
 	xor edx, edx
 
 	mov ax, [esi]			; move into ax the number contained in esi
-	mov bx, 10d				; move 10d into bx to convert to decimal
+	mov bx, 10d			; move 10d into bx to convert to decimal
 
 	convert_convertToDecimal:
-		div bx						; ax = ax / bx
-		;mov quotient, ax			; move ax into quotient
+		div bx			; ax = ax / bx
+		;mov quotient, ax	; move ax into quotient
 
-		push dx						; push remainder into stack
-		inc rmndrCntr				; increment number of items to pop
+		push dx			; push remainder into stack
+		inc rmndrCntr		; increment number of items to pop
 		
-		cmp al, 0		; if quotient is greater than zero
+		cmp al, 0			; if quotient is greater than zero
 		jg convert_convertToDecimal	; jump back to procedure
 		
 		lea esi, decimalValue		; load address of decimal value
-		lea edi, num3				; load address of num3 to use in Num2Str
+		lea edi, num3			; load address of num3 to use in Num2Str
 		
-		cmp ax, 0				; compare if zero
+		cmp ax, 0			; compare if zero
 		jz store_convertToDecimal	; jump to store number
 
 	store_convertToDecimal:
-		pop ax							; pop value into num 
-		call Num2Str					; convert num to string ASCII
+		pop ax				; pop value into num 
+		call Num2Str			; convert num to string ASCII
 		mov bl, num3
-		mov [esi], bx					; move number into esi
-		inc esi							; move to next slot of array
+		mov [esi], bx			; move number into esi
+		inc esi				; move to next slot of array
 
-		dec rmndrCntr					; decrement counter
-		cmp rmndrCntr, 0				; compare counter to 0
-		jnz store_convertToDecimal		; jump if not zero 
+		dec rmndrCntr			; decrement counter
+		cmp rmndrCntr, 0		; compare counter to 0
+		jnz store_convertToDecimal	; jump if not zero 
 
 	done_convertToDecimal:
 		popad		; restore registers
 		popfd		; restore flags
-		ret			; return to caller
+		ret		; return to caller
 convertToDecimal endp
 
 
@@ -280,25 +280,25 @@ convertToDecimal endp
 ;	
 ; -----------------------------------------------------------------------
 convertNumToHex proc
-	pushad						; save registers
-    pushfd						; save flags
+	pushad			; save registers
+        pushfd			; save flags
 	
-	xor eax, eax				; clear EAX register
-	xor ebx, ebx				; clear EBX register
-	xor ecx, ecx				; clear ECX register
-	xor edx, edx				; clear EDX	register
+	xor eax, eax		; clear EAX register
+	xor ebx, ebx		; clear EBX register
+	xor ecx, ecx		; clear ECX register
+	xor edx, edx		; clear EDX	register
 	
-	mov ax, [esi]				; move into ax the number contained in esi
-	mov bx, 16d					; divide by 16d
+	mov ax, [esi]		; move into ax the number contained in esi
+	mov bx, 16d		; divide by 16d
 	
 	convert_NumToHex:	
-		div bx					; div ax = ax / bx
+		div bx				; div ax = ax / bx
 		mov quotient, ax		; move ax to quotient
 
-		push dx					; push remainder into stack
+		push dx				; push remainder into stack
 		inc rmndrCntr			; increment number of items to pop
 		
-		cmp al, 0				; compare if quotient is greater than zero
+		cmp al, 0			; compare if quotient is greater than zero
 		jg convert_NumToHex		; jump back to procedure if still greater than 0
 
 		lea esi, hexValue		; load address of hexValue
@@ -308,11 +308,11 @@ convertNumToHex proc
 		jz storeHexResult		; continue to process to other bases
 	
 	storeHexResult:
-		pop ax					; pop value into num 
+		pop ax				; pop value into num 
 		call Num2Str			; convert num to string ASCII
 		mov bl, num3
 		mov [esi], bx			; move number into esi
-		inc esi					; move to next slot of array
+		inc esi				; move to next slot of array
 
 		dec rmndrCntr			; decrement counter
 		cmp rmndrCntr, 0		; compare counter to 0
@@ -332,51 +332,51 @@ convertNumToHex endp
 ;
 ; -----------------------------------------------------------------------
 convertToBinary proc
-	pushad						; save registers
-    pushfd						; save flags
+	pushad			; save registers
+        pushfd			; save flags
 	
-	xor eax, eax				; clear EAX register
-	xor ebx, ebx				; clear EBX register
-	xor ecx, ecx				; clear ECX register
-	xor edx, edx				; clear EDX	register
+	xor eax, eax		; clear EAX register
+	xor ebx, ebx		; clear EBX register
+	xor ecx, ecx		; clear ECX register
+	xor edx, edx		; clear EDX register
 	
-	mov ax, [esi]				; move into ax the number contained in esi
-	mov bx, 2d					; divide by 2d
+	mov ax, [esi]		; move into ax the number contained in esi
+	mov bx, 2d		; divide by 2d
 	
 	convert_convertToBinary:	
-		div bx					; div ax = ax / bx
-		mov quotient, ax		; compare to quotient
+		div bx			; div ax = ax / bx
+		mov quotient, ax	; compare to quotient
 
-		push dx					; push remainder into stack
-		inc rmndrCntr			; increment number of items to pop
+		push dx			; push remainder into stack
+		inc rmndrCntr		; increment number of items to pop
 		
-		cmp al, 0						; compare if quotient is greater than zero
+		cmp al, 0				; compare if quotient is greater than zero
 		jg convert_convertToBinary		; jump back to procedure if still greater than 0
 
 		lea esi, binaryValue	; load address of binaryValue
-		lea edi, num3			; load address of num3 to use in Num2Str
+		lea edi, num3		; load address of num3 to use in Num2Str
 		
 		cmp quotient, 0			; compare if quotient IS zero
 		jz convert_ToBinary		; continue to process to other bases
 	
 	convert_ToBinary:
-		pop ax					; pop value into num 
+		pop ax				; pop value into num 
 		call Num2Str			; convert num to string ASCII
 		mov bl, num3
 		mov [esi], bx			; move number into esi
-		inc esi					; move to next slot of array
+		inc esi				; move to next slot of array
 
 		dec rmndrCntr			; decrement counter
 		cmp rmndrCntr, 0		; compare counter to 0
-		jnz convert_ToBinary	; jump if not zero
+		jnz convert_ToBinary		; jump if not zero
 
 	done_convertToBinary:
 		; test
 		;lea esi, hexValue
 		;call PrintString
-	popfd						; restore flags
-	popad						; restore registers
-	ret							; return to caller
+		popfd		; restore flags
+		popad		; restore registers
+		ret		; return to caller
 convertToBinary endp
 
 ; -----------------------------------------------------------------------
@@ -391,7 +391,7 @@ convertNumToBaseGiven proc
 	xor eax, eax				; clear EAX register
 	xor ebx, ebx				; clear EBX register
 	xor ecx, ecx				; clear ECX register
-	xor edx, edx				; clear EDX	register
+	xor edx, edx				; clear EDX register
 
 	mov quotient, 0				; reset quotient
 
@@ -399,37 +399,37 @@ convertNumToBaseGiven proc
 	mov bx, baseNum				; divide by baseNum
 	
 	convert_convertNumToBaseGiven:	
-		div bx					; div ax = ax / bx
-		push dx					; push remainder into stack
+		div bx				; div ax = ax / bx
+		push dx				; push remainder into stack
 		inc rmndrCntr			; increment number of items to pop
 		
-		cmp al, 0								; compare if quotient is greater than zero
-		jg convert_convertNumToBaseGiven		; jump back to procedure if still greater than 0
+		cmp al, 0				; compare if quotient is greater than zero
+		jg convert_convertNumToBaseGiven	; jump back to procedure if still greater than 0
 
-		lea esi, baseValue				; load address of binaryValue
-		lea edi, num3					; load address of num3 to use in Num2Str
+		lea esi, baseValue			; load address of binaryValue
+		lea edi, num3				; load address of num3 to use in Num2Str
 		
-		cmp ax, 0					; compare if quotient IS zero
+		cmp ax, 0				; compare if quotient IS zero
 		jz convert_NumToBaseGiven		; continue to process to other bases
 	
 	convert_NumToBaseGiven:
 		pop ax					; pop value into num 
-		call Num2Str			; convert num to string ASCII
+		call Num2Str				; convert num to string ASCII
 		mov bl, num3
-		mov [esi], bx			; move number into esi
+		mov [esi], bx				; move number into esi
 		inc esi					; move to next slot of array
 
-		dec rmndrCntr					; decrement counter
-		cmp rmndrCntr, 0				; compare counter to 0
+		dec rmndrCntr				; decrement counter
+		cmp rmndrCntr, 0			; compare counter to 0
 		jnz convert_NumToBaseGiven		; jump if not zero
 
 	done_convertNumToBaseGiven:
 		; test
 		;lea esi, hexValue
 		;call PrintString
-	popfd						; restore flags
-	popad						; restore registers
-	ret							; return to caller
+		popfd		; restore flags
+		popad		; restore registers
+		ret		; return to caller
 convertNumToBaseGiven endp
 
 ;------------------------------------------------------------------------------
@@ -443,40 +443,40 @@ Num2Str proc
 	pushad			; save registers
 	pushfd			; save flags
 	
-	xor bx, bx								; clear bx register
-	xor cx, cx								; clear cx register
-	xor dx, dx								; clear dx register
+	xor bx, bx		; clear bx register
+	xor cx, cx		; clear cx register
+	xor dx, dx		; clear dx register
 
-	;mov ax, [esi]							; move into ax the esi value to produce string
-	mov bx, 10h								; move into bx the number ten to use in ascii conversion
+	;mov ax, [esi]		; move into ax the esi value to produce string
+	mov bx, 10h		; move into bx the number ten to use in ascii conversion
 
-	cmp ax, 9								; compare number to greater than 9
-	jg  processGreater_Num2Str				; jump if number is greater than 9
+	cmp ax, 9					; compare number to greater than 9
+	jg  processGreater_Num2Str			; jump if number is greater than 9
 
 	add10_Num2Str:
-		add ax, 30h							; add 30h to convert to ascii
-		mov [edi], ax						; move ascii value to address in edi
-		jmp done_Num2Str					; done converting value to ascii
+		add ax, 30h				; add 30h to convert to ascii
+		mov [edi], ax				; move ascii value to address in edi
+		jmp done_Num2Str			; done converting value to ascii
 
 	; number is greater than 9. Hence it is A, B, C, etc...
 	; number A=41h B =42h C=43
 	; subtract number from 10 and add 40h to convert to ASCII letter 
 	processGreater_Num2Str:
-		sub ax, 10							; subtract 10h
-		add ax, 41h							; add 40h
-		mov [edi], ax						; move result into AX
+		sub ax, 10				; subtract 10h
+		add ax, 41h				; add 40h
+		mov [edi], ax				; move result into AX
 
 	done_Num2Str:
 		; esi has anwser now 
 		; test output here
-		;mov edi, 0							; move null terminator into buffer
-		;lea esi, usrStringResult			; load into esi userStringResult
-		;call printString					; print result
-		mov Num2StrCount, 0					; reset counter for next call
+		;mov edi, 0				; move null terminator into buffer
+		;lea esi, usrStringResult		; load into esi userStringResult
+		;call printString			; print result
+		mov Num2StrCount, 0			; reset counter for next call
 
 	popfd			; restore flags
 	popad			; restore registers
-	ret				; return to caller
+	ret			; return to caller
 Num2Str endp
 
 ;------------------------------------------------------------------------------
@@ -485,52 +485,48 @@ Num2Str endp
 ;        : address of location to write word-sized numeric result in EDI
 ;------------------------------------------------------------------------------
 Str2Num proc                       ; Define procedure
-            pushad                     ; save registers
-            pushfd                     ; save flags
+        pushad                     ; save registers
+        pushfd                     ; save flags
 
-			; initialize any variables and registers
-			xor ax, ax					; using AX for total
-			xor cx, cx					; zero out cx... used for processing characters
-			lea esi, usrString
+	; initialize any variables and registers
+	xor ax, ax					; using AX for total
+	xor cx, cx					; zero out cx... used for processing characters
+	lea esi, usrString
+	; loop through each character
+	foreachChar_str2num:
+		cmp byte ptr [esi], 0			; compare character to null terminator
+		jz done_str2num				; if null found, done with loop
+		; total = total * base + digit
+		mul bx					; multiply total (AX) times number base (BX)
+		mov cl, [esi]				; move character into register
+		cmp cl, '9'				; check if character is digit				
+		jg isAlpha_str2num			; if not digit, jump to alpha section
+		
+	isDigit_str2num:
+		sub cl, '0'			; convert ascii character into numeric value, i.e. '1' => 1
+		jmp addToTotal_str2num  	; jump over alpha processing
+	
+	isAlpha_str2num:
+		and cl, 0dfh			; ensure uppercase; 1101 1111
+		sub cl, 'A'			; 'A'=0, 'B'=1, 'C'=2, ...
+		add cl, 10			; 'A'=10, 'B'=11, 'C'=12, ...
 
-			; loop through each character
-			foreachChar_str2num:
-							
-				cmp byte ptr [esi], 0	; compare character to null terminator
-				jz done_str2num			; if null found, done with loop
-
-				; total = total * base + digit
-				mul bx					; multiply total (AX) times number base (BX)
-				mov cl, [esi]			; move character into register
-				cmp cl, '9'				; check if character is digit				
-				jg isAlpha_str2num		; if not digit, jump to alpha section
-
-			isDigit_str2num:
-				sub cl, '0'				; convert ascii character into numeric value, i.e. '1' => 1
-				jmp addToTotal_str2num  ; jump over alpha processing
-
-			isAlpha_str2num:
-				and cl, 0dfh			; ensure uppercase; 1101 1111
-				sub cl, 'A'				; 'A'=0, 'B'=1, 'C'=2, ...
-				add cl, 10				; 'A'=10, 'B'=11, 'C'=12, ...
-
-			addToTotal_str2num:
-				add ax, cx				; add number to total
-				inc esi					; move pointer to next character in string
-				jmp foreachChar_str2num ; continue with loop
+	addToTotal_str2num:
+		add ax, cx		; add number to total
+		inc esi			; move pointer to next character in string
+		jmp foreachChar_str2num ; continue with loop
 			
-			exit_str2num:
-				invoke ExitProcess, 0		; exit program
+	exit_str2num:
+		invoke ExitProcess, 0		; exit program
 
-			done_str2num:
+	done_str2num:
+	; at this point AX contains answer
+	; let's store it
+		lea edi, baseNum
+		mov [edi], ax
 
-				; at this point AX contains answer
-				; let's store it
-				lea edi, baseNum
-				mov [edi], ax
-
-				cmp baseNum, 35		   ; compare base to 'Z'
-				jg exit_str2num		   ; jump if greater
+		cmp baseNum, 35		   ; compare base to 'Z'
+		jg exit_str2num		   ; jump if greater
 
             popfd                      ; restore flags
             popad                      ; restore registers
@@ -543,55 +539,55 @@ Str2Num endp
 ; Output: Result number in numeric form stored into resultCal variable
 ; -----------------------------------------------------------------------
 parseString proc
-	pushad								; save registers
-    pushfd								; save flags
+	pushad			
+    	pushfd				
 	
 	; initialize any variables and clear any registers
-	xor ax, ax							; using AX for total
-	xor bx, bx							; zero out bx if needed
-	xor cx, cx							; zero out cx... used for processing characters
+	xor ax, ax				; using AX for total
+	xor bx, bx				; zero out bx if needed
+	xor cx, cx				; zero out cx... used for processing characters
 	
-	xor esi, esi						; clear esi register
+	xor esi, esi				; clear esi register
 	
-	call Str2NumSpace					; parse usrString
+	call Str2NumSpace			; parse usrString
 
-	cmp operand, '+'					; compare operand to '+' 
-	jz plusOp_parseString				; jump to plus operand calculation
+	cmp operand, '+'			; compare operand to '+' 
+	jz plusOp_parseString			; jump to plus operand calculation
 
-	cmp operand, '-'					; compare operand to '-'
-	jz minusOp_parseString				; jump to minus operand calculation
+	cmp operand, '-'			; compare operand to '-'
+	jz minusOp_parseString			; jump to minus operand calculation
 
-	cmp operand, '/'					; compare operand to '/'
-	jz divOp_parseString				; jump to division operand calculation
+	cmp operand, '/'			; compare operand to '/'
+	jz divOp_parseString			; jump to division operand calculation
 
-	cmp operand, '*'					; compare operand to '*'
-	jz mulOp_parseString				; jump to division operand calculation
+	cmp operand, '*'			; compare operand to '*'
+	jz mulOp_parseString			; jump to division operand calculation
 	
 	plusOp_parseString:
-		mov ax, num1					; move into ax num1
-		add ax, num2					; add num1 to num2, store into ax
-		mov resultCal, ax				; store result in variable
-		jmp done_parseString			; jump to done
+		mov ax, num1			; move into ax num1
+		add ax, num2			; add num1 to num2, store into ax
+		mov resultCal, ax		; store result in variable
+		jmp done_parseString		; jump to done
 	
 	minusOp_parseString:
-		mov ax, num1					; move into ax num1
-		sub ax, num2					; subtract ax - num1
-		mov resultCal, ax				; store result
-		jmp done_parseString			; jump to done
+		mov ax, num1			; move into ax num1
+		sub ax, num2			; subtract ax - num1
+		mov resultCal, ax		; store result
+		jmp done_parseString		; jump to done
 		
 	divOp_parseString:
-		mov ax, num1					; move num1 into ax
-		mov bx, num2					; move num2 into bx
-		div bx							; div ax = ax / bx
-		mov resultCal, ax				; move result into variable
-		jmp done_parseString			; jump to done
+		mov ax, num1			; move num1 into ax
+		mov bx, num2			; move num2 into bx
+		div bx				; div ax = ax / bx
+		mov resultCal, ax		; move result into variable
+		jmp done_parseString		; jump to done
 	
 	mulOp_parseString:
-		mov ax, num1					; move num1 into ax
-		mov bx, num2					; move num2 into bx
-		mul bx							; ax = ax * bx
-		mov resultCal, ax				; store result
-		jmp done_parseString			; jump to done
+		mov ax, num1			; move num1 into ax
+		mov bx, num2			; move num2 into bx
+		mul bx				; ax = ax * bx
+		mov resultCal, ax		; store result
+		jmp done_parseString		; jump to done
 	
 	done_parseString:
 		popfd                      ; restore flags
@@ -608,84 +604,83 @@ Str2NumSpace proc                      ; Define procedure
             pushad                     ; save registers
             pushfd                     ; save flags
 
-			; initialize any variables and registers
-			xor ax, ax					; using AX for total
-			xor cx, cx					; zero out cx... used for processing characters
-			lea esi, usrString			; load address of string
-			mov bx, baseNum				; move into bx baseNum
+	; initialize any variables and registers
+	xor ax, ax				; using AX for total
+	xor cx, cx				; zero out cx... used for processing characters
+	lea esi, usrString			; load address of string
+	mov bx, baseNum				; move into bx baseNum
 
-			; loop through each character
-			foreachChar_Str2NumSpace:
-							
-				cmp byte ptr [esi], " "			; compare character to null terminator
-				jz done_Str2NumSpace			; if null found, done with loop
+	; loop through each character
+	foreachChar_Str2NumSpace:
+					
+		cmp byte ptr [esi], " "			; compare character to null terminator
+		jz done_Str2NumSpace			; if null found, done with loop
 
-				; total = total * base + digit
-				mul bx							; multiply total (AX) times number base (BX)
-				mov cl, [esi]					; move character into register
-				cmp cl, '9'						; check if character is digit				
-				jg isAlpha_Str2NumSpace			; if not digit, jump to alpha section
+		; total = total * base + digit
+		mul bx					; multiply total (AX) times number base (BX)
+		mov cl, [esi]				; move character into register
+		cmp cl, '9'				; check if character is digit				
+		jg isAlpha_Str2NumSpace			; if not digit, jump to alpha section
 
-			isDigit_Str2NumSpace:
-				sub cl, '0'						; convert ascii character into numeric value, i.e. '1' => 1
-				jmp addToTotal_Str2NumSpace		; jump over alpha processing
+	isDigit_Str2NumSpace:
+		sub cl, '0'				; convert ascii character into numeric value, i.e. '1' => 1
+		jmp addToTotal_Str2NumSpace		; jump over alpha processing
 
-			isAlpha_Str2NumSpace:
-				and cl, 0dfh					; ensure uppercase; 1101 1111
-				sub cl, 'A'						; 'A'=0, 'B'=1, 'C'=2, ...
-				add cl, 10						; 'A'=10, 'B'=11, 'C'=12, ...
+	isAlpha_Str2NumSpace:
+		and cl, 0dfh				; ensure uppercase; 1101 1111
+		sub cl, 'A'				; 'A'=0, 'B'=1, 'C'=2, ...
+		add cl, 10				; 'A'=10, 'B'=11, 'C'=12, ...
 												
-			addToTotal_Str2NumSpace:			
-				add ax, cx						; add number to total
-				inc esi							; move pointer to next character in string
-				jmp foreachChar_Str2NumSpace	; continue with loop
+	addToTotal_Str2NumSpace:			
+		add ax, cx				; add number to total
+		inc esi					; move pointer to next character in string
+		jmp foreachChar_Str2NumSpace		; continue with loop
 			
-			done_Str2NumSpace:
-
-				; at this point AX contains answer
-				; let's store it
-				lea edi, num1
-				mov [edi], ax
+	done_Str2NumSpace:
+		; at this point AX contains answer
+		; let's store it
+		lea edi, num1
+		mov [edi], ax
 			
-			inc esi;							; continue processing string, increment to operator
-			mov cl, [esi]						; load operator into operator variable
-			mov operand, cl						; copy cl operand into operand variable
-			inc esi;							; this is a space
-			inc esi;							; this is the second number, repeat procedure above but store result into num2 var
-			;mov bx, baseNum						   ; move into bx baseNum
-			xor eax, eax						; clear eax for next number
+	inc esi;			; continue processing string, increment to operator
+	mov cl, [esi]			; load operator into operator variable
+	mov operand, cl			; copy cl operand into operand variable
+	inc esi;			; this is a space
+	inc esi;			; this is the second number, repeat procedure above but store result into num2 var
+	;mov bx, baseNum	        ; move into bx baseNum
+	xor eax, eax			; clear eax for next number
 
-			; loop through each character
-			foreachChar_Str2NumSpace2:
-							
-				cmp byte ptr [esi], 0			; compare character to null terminator
-				jz done_Str2NumSpace2			; if null found, done with loop
-
-				; total = total * base + digit
-				mul bx							; multiply total (AX) times number base (BX)
-				mov cl, [esi]					; move character into register
-				cmp cl, '9'						; check if character is digit				
-				jg isAlpha_Str2NumSpace2		; if not digit, jump to alpha section
-
-			isDigit_Str2NumSpace2:
-				sub cl, '0'						; convert ascii character into numeric value, i.e. '1' => 1
-				jmp addToTotal_Str2NumSpace2	; jump over alpha processing
-
-			isAlpha_Str2NumSpace2:
-				and cl, 0dfh					; ensure uppercase; 1101 1111
-				sub cl, 'A'						; 'A'=0, 'B'=1, 'C'=2, ...
-				add cl, 10						; 'A'=10, 'B'=11, 'C'=12, ...
-
-			addToTotal_Str2NumSpace2:
-				add ax, cx						; add number to total
-				inc esi							; move pointer to next character in string
-				jmp foreachChar_Str2NumSpace2	; continue with loop
+	; loop through each character
+	foreachChar_Str2NumSpace2:
 			
-			done_Str2NumSpace2:
-				; at this point AX contains answer
-				; let's store it
-				lea edi, num2
-				mov [edi], ax
+		cmp byte ptr [esi], 0			; compare character to null terminator
+		jz done_Str2NumSpace2			; if null found, done with loop
+
+		; total = total * base + digit
+		mul bx							; multiply total (AX) times number base (BX)
+		mov cl, [esi]					; move character into register
+		cmp cl, '9'						; check if character is digit				
+		jg isAlpha_Str2NumSpace2		; if not digit, jump to alpha section
+
+	isDigit_Str2NumSpace2:
+		sub cl, '0'						; convert ascii character into numeric value, i.e. '1' => 1
+		jmp addToTotal_Str2NumSpace2	; jump over alpha processing
+
+	isAlpha_Str2NumSpace2:
+		and cl, 0dfh					; ensure uppercase; 1101 1111
+		sub cl, 'A'						; 'A'=0, 'B'=1, 'C'=2, ...
+		add cl, 10						; 'A'=10, 'B'=11, 'C'=12, ...
+
+	addToTotal_Str2NumSpace2:
+		add ax, cx						; add number to total
+		inc esi							; move pointer to next character in string
+		jmp foreachChar_Str2NumSpace2	; continue with loop
+			
+	done_Str2NumSpace2:
+		; at this point AX contains answer
+		; let's store it
+		lea edi, num2
+		mov [edi], ax
 
             popfd                      ; restore flags
             popad                      ; restore registers
@@ -696,15 +691,15 @@ Str2NumSpace endp
 ; printCalcPrompt -> Prints colon out to screen
 ; -----------------------------------------------------------------------
 printCalcPrompt proc
-			pushad                     ; save registers
-            pushfd                     ; save flags
+	pushad                     ; save registers
+        pushfd                     ; save flags
 			
-			lea esi, colon			   ; load address of colon into esi
-			call PrintString		   ; print colon to screen
+	lea esi, colon			   ; load address of colon into esi
+	call PrintString		   ; print colon to screen
  
-			popfd                      ; restore flags
-			popad                      ; restore registers
-			ret                        ; return to caller
+	popfd                      ; restore flags
+	popad                      ; restore registers
+	ret                        ; return to caller
 printCalcPrompt endp
 
 ; -----------------------------------------------------------------------
@@ -715,29 +710,29 @@ printCalcPrompt endp
 ;	Output: returns to caller if not 'q' or 'Q', otherwise exits program
 ; -----------------------------------------------------------------------
 compString proc
-			pushad                     ; save registers
-            pushfd                     ; save flags
+	pushad                     ; save registers
+        pushfd                     ; save flags
 
-			;load address of user string
-			lea esi, usrString
+	;load address of user string
+	lea esi, usrString
 
-			;if q, compare 
-			;compare first character to 81 and 113
-			cmp byte ptr [esi], "Q"			; compare first character of esi to Q
-			jz exitProgram					; exit if "Q" - "Q" = 0, register ZR = 1
-			cmp byte ptr [esi], "q"			; compare first character of esi to q
-			jz exitProgram					; exit if "q" - "q" = 0, register ZR = 1
+	;if q, compare 
+	;compare first character to 81 and 113
+	cmp byte ptr [esi], "Q"			; compare first character of esi to Q
+	jz exitProgram					; exit if "Q" - "Q" = 0, register ZR = 1
+	cmp byte ptr [esi], "q"			; compare first character of esi to q
+	jz exitProgram					; exit if "q" - "q" = 0, register ZR = 1
 			
-			;else continueProgram since string isn't "q" or "Q"
-			jmp continueProgram
+	;else continueProgram since string isn't "q" or "Q"
+	jmp continueProgram
 
-			exitProgram:
-				invoke ExitProcess, 0		; Exits program if 'q' or 'Q'			
+	exitProgram:
+		invoke ExitProcess, 0		; Exits program if 'q' or 'Q'			
             
-			continueProgram:
-				popfd                      ; restore flags
-				popad                      ; restore registers
-				ret                        ; return to caller
+	continueProgram:
+		popfd                      ; restore flags
+		popad                      ; restore registers
+		ret                        ; return to caller
 compString endp
 
 ; -----------------------------------------------------------------------
@@ -764,7 +759,7 @@ printPrompt proc
     pushfd						; save flags
 	
 	lea esi, starStr			; Load address of starStr variable into esi 
-    call PrintString			; Print stars into terminal
+	call PrintString			; Print stars into terminal
 	
 	lea esi, promptMsg			; Load address of promptMsg variable into esi 	
 	call PrintString			; Print first prompt message line
@@ -782,8 +777,8 @@ printPrompt proc
  	call PrintString			; Print stars into terminal
     
 	popfd                      ; restore flags
-    popad                      ; restore registers
-    ret                        ; return to caller
+	popad                      ; restore registers
+	ret                        ; return to caller
 printPrompt endp
 
 ; -----------------------------------------------------------------------
@@ -800,7 +795,7 @@ numBasePrompt proc
 
 	popfd				; restore flags
 	popad				; restore registers
-	ret					; return to caller
+	ret				; return to caller
 numBasePrompt endp
 
 ;------------------------------------------------------------------------------
