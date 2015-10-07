@@ -386,7 +386,7 @@ convertToBinary endp
 ; -----------------------------------------------------------------------
 convertNumToBaseGiven proc
 	pushad						; save registers
-    pushfd						; save flags
+	pushfd						; save flags
 	
 	xor eax, eax				; clear EAX register
 	xor ebx, ebx				; clear EBX register
