@@ -79,21 +79,21 @@ WriteFile proto,
 	;Variables to parse input
 	num1		WORD 0
 	num2		WORD 0
-	num			WORD 0
+	num		WORD 0
 	num3		db ?
 	operand		db ?
 	numCount	WORD 0
 	resultCal	WORD 0
 
 	; Conversion variables. binary, decimal, hex, and base given
-	binaryValue		db 50 dup(?)
+	binaryValue	db 50 dup(?)
 	decimalValue	db 50 dup(?)
-	hexValue		db 40 dup(?)	
-	baseValue		db 50 dup(?)
+	hexValue	db 40 dup(?)	
+	baseValue	db 50 dup(?)
 
-	quotient		WORD ?
-	remainder		WORD ?
-	rmndrCntr		WORD 0			;counter to number of remainders pushed into stack 
+	quotient	WORD ?
+	remainder	WORD ?
+	rmndrCntr	WORD 0			;counter to number of remainders pushed into stack 
 
 	Num2StrCount dw 0				; counter for num 2 string
 	
@@ -106,10 +106,10 @@ WriteFile proto,
 	
 	; Variables to print results to screen
 	binaryPrompt	 db "Binary: ", 0
-	hexPrompt		 db "Hex: ", 0
+	hexPrompt	 db "Hex: ", 0
 	BaseGivenPrompt	 db "BaseGiven: ", 0
 	decimalPrompt	 db "Decimal: ", 0
-	spaces			 db "   ", 0
+	spaces		 db "   ", 0
 
 ; -----------------------------------------------------------------------
 ; main -> Code Segment
