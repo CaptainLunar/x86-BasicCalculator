@@ -126,16 +126,16 @@ main proc
    
    ;loop until user enters 'q' or 'Q'
    calLoop:
-		call numBasePrompt		; Prompt user to enter base or quit
-		call getUsrString		; get the string from prompt to store in usrString variable
-		call compString			; compares string in usrString, if 'q' or 'Q' exits program
-		call Str2Num		        ; function to convert usrString to number, stores result in baseNum 				
-		call printCalcPrompt		; prints prompt for user calculation input, Display ": " prompt for calculation line
-		call getUsrString		; get calculation line from user
-		call parseString		; parse the line, and calculate answer
-		call convertResults		; convert results of calculations into binary, decimal, Hex, and Base given
-		call printResult		; print result of operation to screen
-		jmp calLoop			; go back to mainLoop								
+	call numBasePrompt		; Prompt user to enter base or quit
+	call getUsrString		; get the string from prompt to store in usrString variable
+	call compString			; compares string in usrString, if 'q' or 'Q' exits program
+	call Str2Num		        ; function to convert usrString to number, stores result in baseNum 				
+	call printCalcPrompt		; prints prompt for user calculation input, Display ": " prompt for calculation line
+	call getUsrString		; get calculation line from user
+	call parseString		; parse the line, and calculate answer
+	call convertResults		; convert results of calculations into binary, decimal, Hex, and Base given
+	call printResult		; print result of operation to screen
+	jmp calLoop			; go back to mainLoop								
 
    invoke ExitProcess, 0			
 main endp
