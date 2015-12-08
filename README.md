@@ -8,4 +8,4 @@ To-Do:
 
 Make calculator accept at least 10 operators all in order. 
 No order of operations, calculator will calculate based on order given.
-
+Fix the darn thing. It doesn't work well. 
